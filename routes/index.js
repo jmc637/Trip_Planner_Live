@@ -26,6 +26,8 @@ router.get('/', function(req, res, next) {
     findingRestaurants
   ])
   .spread(function(hotels, activities, restaurants) {
+    console.log(hotels);
+    
     res.render('index', {
       hotels: hotels,
       activities: activities,
