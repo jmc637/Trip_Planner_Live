@@ -1,16 +1,11 @@
 //Fake data storage
 var days = [];
 
-var currDay = {
-    hotel: {
-        name: null,
-        marker: null
-    },
-    restaurants: [],
-    activities: [],
-}
-
+var index = 0;
 //Helper functions: Updating map for new data
+var currDay;
+
+createDay();
 
 const drawNewHotel = function() {
     if (currDay.hotel.marker) {
@@ -105,3 +100,78 @@ $('#activityAdd').on('click', function(e) {
     var selectedActivity = $('#activity-choices').find(":selected").text();
     addActivity(selectedActivity);
 })
+
+$('#restaurantAdd').on('click', function(e) {
+    var selectedRestaurant = $('#restaurant-choices').find(":selected").text();
+    addRestaurant(selectedRestaurant);
+})
+
+$('#itinerary .hotels').on('click', function(e){
+    currDay.hotel.name = null;
+    deleteMarker(currDay.hotel.marker);
+    currDay.hotel.marker = null;
+    $(e.target).parent().replaceWith('<div></div>');
+})
+
+$('#itinerary .restaurants').on('click', function(e){
+    var text = $(e.target).prev().text();
+    var selectedRestaurant = currDay.restaurants.find(function(restaurant){
+        return restaurant.name === text;
+    });
+    currDay.restaurants.splice(currDay.restaurants.indexOf(selectedRestaurant),1);
+    $(e.target).parent().remove();
+    deleteMarker(selectedRestaurant.marker);
+})
+
+$('#itinerary .activities').on('click', function(e){
+    var text = $(e.target).prev().text();
+    var selectedActivity = currDay.activities.find(function(activity){
+        return activity.name === text;
+    });
+    currDay.activities.splice(currDay.activities.indexOf(selectedActivity),1);
+    $(e.target).parent().remove();
+    deleteMarker(selectedActivity.marker);
+})
+
+$('#day-add').on('click', function(e){
+    createDay();
+})
+
+function createDay(){
+    index++;
+    removeMarkers();    
+    days.push(
+        {
+            hotel: {
+                name: null,
+                marker: null
+            },
+            restaurants: [],
+            activities: [],
+        }
+    );
+    currDay = days[index - 1];
+    clearItinerary();
+    addButton();
+}
+
+function clearItinerary(){
+    $('#itinerary .hotels').empty().append('<div></div>');
+    $('#itinerary .restaurants').empty();
+    $('#itinerary .activities').empty();
+}
+
+function addButton(){
+    var button = '<button class="btn btn-circle day-btn current-day">' + (index) +'</button>';
+    $('#day-add').before(button);
+}
+
+function removeMarkers(){
+    deleteMarker(currDay.hotel.marker);
+    currDay.restaurants.forEach(function(restaurant){
+        deleteMarker(restaurant.marker);
+    });
+    currDay.activities.forEach(function(activity){
+        deleteMarker(activity.marker);
+    });
+}
