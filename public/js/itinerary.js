@@ -1,11 +1,6 @@
-//Fake data storage
-var days = [];
 
-var index = 0;
 //Helper functions: Updating map for new data
-var currDay;
-
-createDay();
+// var currDay;
 
 const drawNewHotel = function() {
     if (currDay.hotel.marker) {
@@ -136,42 +131,3 @@ $('#itinerary .activities').on('click', function(e){
 $('#day-add').on('click', function(e){
     createDay();
 })
-
-function createDay(){
-    index++;
-    removeMarkers();    
-    days.push(
-        {
-            hotel: {
-                name: null,
-                marker: null
-            },
-            restaurants: [],
-            activities: [],
-        }
-    );
-    currDay = days[index - 1];
-    clearItinerary();
-    addButton();
-}
-
-function clearItinerary(){
-    $('#itinerary .hotels').empty().append('<div></div>');
-    $('#itinerary .restaurants').empty();
-    $('#itinerary .activities').empty();
-}
-
-function addButton(){
-    var button = '<button class="btn btn-circle day-btn current-day">' + (index) +'</button>';
-    $('#day-add').before(button);
-}
-
-function removeMarkers(){
-    deleteMarker(currDay.hotel.marker);
-    currDay.restaurants.forEach(function(restaurant){
-        deleteMarker(restaurant.marker);
-    });
-    currDay.activities.forEach(function(activity){
-        deleteMarker(activity.marker);
-    });
-}

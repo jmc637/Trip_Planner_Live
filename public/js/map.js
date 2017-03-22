@@ -65,5 +65,7 @@ function drawMarker (type, coords) {
 }
 
 function deleteMarker(marker) {
-  marker.setMap(null);
+  if(marker){
+    marker.setMap(null);
+  }
 }
